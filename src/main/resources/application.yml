@@ -1,0 +1,19 @@
+server:
+  port: 8081
+  address: 127.0.0.1
+
+learn:
+  greeting: Hello
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "!mysql & !test-db"
+  autoconfigure:
+    exclude: org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration

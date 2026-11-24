@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.learning.posts.PostMapper">
+    <sql id="nameFilter">
+        <where>
+            <if test="name != null and name != ''">
+                LOCATE(LOWER(#{name}), LOWER(name)) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="findPage" resultType="com.example.learning.posts.Post">
+        SELECT id, name FROM learn_post
+        <include refid="nameFilter"/>
+        ORDER BY id
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM learn_post
+        <include refid="nameFilter"/>
+    </select>
+
+    <select id="findById" resultType="com.example.learning.posts.Post">
+        SELECT id, name FROM learn_post WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO learn_post (name) VALUES (#{name})
+    </insert>
+</mapper>

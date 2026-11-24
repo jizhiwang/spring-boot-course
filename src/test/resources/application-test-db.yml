@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: "jdbc:h2:mem:course;MODE=MySQL;DB_CLOSE_DELAY=-1"
+    username: sa
+  sql:
+    init:
+      schema-locations: file:./sql/schema.sql
