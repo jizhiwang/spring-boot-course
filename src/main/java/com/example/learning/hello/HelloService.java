@@ -1,18 +1,22 @@
 package com.example.learning.hello;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.example.learning.LearnConfig;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HelloService {
+    private static final Logger log = LoggerFactory.getLogger(HelloService.class);
+    private final LearnConfig config;
 
-    private final String greeting;
-
-    public HelloService(@Value("${learn.greeting}") String greeting) {
-        this.greeting = greeting;
+    public HelloService(LearnConfig config) {
+        this.config = config;
     }
 
     public String greet(String name) {
-        return greeting + ", " + name + "!";
+        log.debug("Building greeting for name={}", name);
+        return config.greeting() + ", " + name + config.punctuation();
     }
 }

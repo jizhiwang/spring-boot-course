@@ -16,9 +16,9 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 
-@SpringBootTest
-@ActiveProfiles("local")
-class MemoryHttpTests {
+@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:course-local;MODE=MySQL;DB_CLOSE_DELAY=-1")
+@ActiveProfiles({"local", "test-db"})
+class LocalProfileHttpTests {
 
     @Autowired
     WebApplicationContext context;
@@ -27,7 +27,7 @@ class MemoryHttpTests {
     void helloUsesProfileGreeting() throws Exception {
         var response = send("GET", "/hello?name=Java", "");
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.getContentAsString()).isEqualTo("{\"message\":\"Hi, Java!\"}");
+        assertThat(response.getContentAsString()).isEqualTo("{\"message\":\"Hi, Java?\"}");
     }
 
     @Test

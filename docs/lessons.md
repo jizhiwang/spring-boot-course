@@ -12,9 +12,9 @@
 
 **验收**：能从 POM 指出 Web Starter，能用 `mvn.cmd -version` 确认 Maven 用的 Java，能解释没有 Spring 管理的 Service 时为什么会在启动阶段报错。
 
-## 第 2 周｜写内存岗位接口，再打包
+## 第 2 周｜读岗位接口，再打包
 
-**第 3 课 · 一个 URL 的三种参数。** 读 `PostController` 和 `MemoryPostRepository`，先手写内存版岗位列表，再补详情和新增。分别找出 URL 上的查询参数、路径中的 ID、请求体中的 JSON 是从哪里进方法的。比较成功响应、校验失败和查不到数据时的 HTTP 状态。
+**第 3 课 · 一个 URL 的三种参数。** 读 `PostController` 的岗位列表、详情和新增。实际发请求前先按第 3 周准备本地 MySQL。分别找出 URL 上的查询参数、路径中的 ID、请求体中的 JSON 是从哪里进方法的。比较成功响应、校验失败和查不到数据时的 HTTP 状态。
 
 ```powershell
 curl.exe -i "http://127.0.0.1:8081/posts?name=Java&pageSize=1"
@@ -29,11 +29,11 @@ curl.exe -i -H "Content-Type: application/json" -d "{}" "http://127.0.0.1:8081/p
 
 ```powershell
 java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar
-java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar --spring.profiles.active=local
-java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar --spring.profiles.active=local --server.port=8090
+java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar --spring.profiles.active=mysql,local
+java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar --spring.profiles.active=mysql,local --server.port=8090
 ```
 
-预期端口依次为 `8081`、`8082`、`8090`，问候语依次为 `Hello`、`Hi`、`Hi`。比较 `@Value` 读取单项配置和若依的 [RuoYiConfig](../../RuoYi-Vue/ruoyi-common/src/main/java/com/ruoyi/common/config/RuoYiConfig.java) 对一组配置做绑定。
+预期端口依次为 `8081`、`8082`、`8090`，问候语依次取基础配置、`Hi`、`Hi`。比较 `@Value` 读取单项配置和若依的 [RuoYiConfig](../../RuoYi-Vue/ruoyi-common/src/main/java/com/ruoyi/common/config/RuoYiConfig.java) 对一组配置做绑定。
 
 配置练习可以再做一步。在临时练习中增加 `learn.punctuation: "!"`，建一个带两个字段的 `@ConfigurationProperties("learn")` 配置类，用 `@EnableConfigurationProperties` 注册，再让 `HelloService` 通过构造器取得配置对象。把 `local` 的标点改成 `?`，重启后检查 JSON 是否变成 `{"message":"Hi, Java?"}`。
 
@@ -41,7 +41,7 @@ java -jar target/spring-boot-course-1.0.0-SNAPSHOT.jar --spring.profiles.active=
 
 ## 第 3 周｜让岗位数据进入 MySQL
 
-**第 5 课 · 从 Java 方法找到 SQL。** 按 `PostController → PostService → MyBatisPostRepository → PostMapper → PostMapper.xml` 阅读。Mapper 接口声明想做什么，XML 提供 SQL，MyBatis 负责绑定参数和映射结果。用 `mvn.cmd dependency:tree` 找到 MyBatis Starter、连接池和 MySQL 驱动，看看哪些是直接声明的。
+**第 5 课 · 从 Java 方法找到 SQL。** 按 `PostController → PostService → PostMapper → PostMapper.xml` 阅读。Mapper 接口声明想做什么，XML 提供 SQL，MyBatis 负责绑定参数和映射结果。用 `mvn.cmd dependency:tree` 找到 MyBatis Starter、连接池和 MySQL 驱动，看看哪些是直接声明的。
 
 准备专用空库 `spring_boot_course`，用本地有授权的练习账号一次性执行 [schema.sql](../sql/schema.sql)。从课程目录启动 MySQL 客户端，再执行下列命令。课程库和若依库分别使用各自的 SQL。
 
