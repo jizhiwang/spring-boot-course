@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.learning.courses.CourseMapper">
+    <sql id="nameFilter">
+        WHERE LOCATE(LOWER(#{name}), LOWER(name)) &gt; 0 OR #{name} = ''
+    </sql>
+
+    <select id="findPage" resultType="com.example.learning.courses.Course">
+        SELECT id, name FROM learn_course
+        <include refid="nameFilter"/>
+        ORDER BY name, id
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM learn_course
+        <include refid="nameFilter"/>
+    </select>
+
+    <select id="find" resultType="com.example.learning.courses.Course">
+        SELECT id, name FROM learn_course WHERE id = #{id}
+    </select>
+
+    <select id="findLabels" resultType="string">
+        SELECT label FROM learn_course_label WHERE course_id = #{id} ORDER BY label
+    </select>
+
+    <insert id="insert">
+        INSERT INTO learn_course (id, name) VALUES (#{id}, #{name})
+    </insert>
+
+    <update id="update">
+        UPDATE learn_course SET name = #{name} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteLabels">
+        DELETE FROM learn_course_label WHERE course_id = #{id}
+    </delete>
+
+    <insert id="insertLabel">
+        INSERT INTO learn_course_label (course_id, label) VALUES (#{id}, #{label})
+    </insert>
+</mapper>

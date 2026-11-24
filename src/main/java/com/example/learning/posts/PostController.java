@@ -21,8 +21,8 @@ class PostController {
 
     @GetMapping
     PageResult<Post> list(@RequestParam(required = false) String name,
-                         @RequestParam(defaultValue = "1") @Min(1) int pageNum,
-                         @RequestParam(defaultValue = "10") @Min(1) @Max(100) int pageSize) {
+                          @RequestParam(defaultValue = "1") @Min(1) int pageNum,
+                          @RequestParam(defaultValue = "10") @Min(1) @Max(100) int pageSize) {
         return service.list(name, pageNum, pageSize);
     }
 
