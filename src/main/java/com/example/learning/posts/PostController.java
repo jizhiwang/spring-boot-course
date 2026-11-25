@@ -1,5 +1,6 @@
 package com.example.learning.posts;
 
+import com.example.learning.common.Result;
 import com.example.learning.web.PageResult;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -27,8 +28,8 @@ class PostController {
     }
 
     @GetMapping("/{id}")
-    Post find(@PathVariable long id) {
-        return service.find(id);
+    Result find(@PathVariable long id) {
+        return Result.success(service.find(id));
     }
 
     @PostMapping

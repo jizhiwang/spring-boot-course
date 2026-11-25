@@ -1,5 +1,8 @@
 package com.example.learning;
 
+import java.util.Map;
+
+import com.jayway.jsonpath.JsonPath;
 import com.example.learning.hello.HelloController;
 import com.example.learning.hello.HelloService;
 import org.junit.jupiter.api.Test;
@@ -43,7 +46,13 @@ class LocalProfileHttpTests {
         var firstPage = send("GET", "/posts?name=Java&pageNum=1&pageSize=1", "");
         assertThat(firstPage.getStatus()).isEqualTo(200);
         assertThat(firstPage.getContentAsString()).contains("Java Developer", "\"total\":2").doesNotContain("Java Lead");
-        assertThat(send("GET", "/posts/2", "").getContentAsString()).contains("QA Engineer");
+        Map<String, Object> page = JsonPath.parse(firstPage.getContentAsString()).read("$");
+        assertThat(page).containsOnlyKeys("rows", "total");
+        var detail = send("GET", "/posts/2", "");
+        assertThat(detail.getStatus()).isEqualTo(200);
+        Map<String, Object> result = JsonPath.parse(detail.getContentAsString()).read("$");
+        assertThat(result).containsOnlyKeys("code", "msg", "data").containsEntry("code", 200);
+        assertThat(JsonPath.<String>read(detail.getContentAsString(), "$.data.name")).isEqualTo("QA Engineer");
         assertThat(send("GET", "/posts/999", "").getStatus()).isEqualTo(404);
         assertThat(send("GET", "/posts?pageSize=101", "").getStatus()).isEqualTo(400);
         assertThat(send("POST", "/posts", "{}").getStatus()).isEqualTo(400);
